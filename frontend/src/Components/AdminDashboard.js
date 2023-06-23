@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 import { Box, Button, Heading, Grommet, Text, Grid } from "grommet";
 
-import "./App.css";
+import "../App.css";
 
 const theme = {
   global: {
@@ -35,10 +35,10 @@ const SidebarButtons = () => {
       <Box fill direction="row">
         <Box background="brand">
           {[
-            "View Medical History",
-            "View Appointments",
-            "Schedule Appointment",
-            "Settings",
+            "Add Patient",
+            "Add Doctor",
+            "Patients List",
+            "Doctors List",
             "Sign Out",
           ].map((label) => (
             <SidebarButton
@@ -46,35 +46,17 @@ const SidebarButtons = () => {
               label={label}
               active={label === active}
               onClick={() => {
-                if (label === "Schedule Appointment") {
-                  let email_in_use = "";
-                  fetch("http://localhost:3001/userInSession")
-                    .then((res) => res.json())
-                    .then((res) => {
-                      var string_json = JSON.stringify(res);
-                      var email_json = JSON.parse(string_json);
-                      email_in_use = email_json.email;
-                      console.log("Email In Use Is :" + email_in_use);
-                      window.location = "/scheduleAppointment/" + email_in_use + "/patient";
-                    });
+                if (label === "Patients List") {
+                  window.location = "/patientsList";
                 } else if (label === "Sign Out") {
                   fetch("http://localhost:3001/endSession");
                   window.location = "/";
-                } else if (label === "View Appointments") {
-                  window.location = "/PatientsViewAppt";
-                } else if (label === "View Medical History") {
-                  let email_in_use = "";
-                  fetch("http://localhost:3001/userInSession")
-                    .then((res) => res.json())
-                    .then((res) => {
-                      var string_json = JSON.stringify(res);
-                      var email_json = JSON.parse(string_json);
-                      email_in_use = email_json.email;
-                      console.log("Email In Use Is :" + email_in_use);
-                      window.location = "/ViewOneHistory/" + email_in_use;
-                    });
-                } else if (label === "Settings") {
-                  window.location = "/Settings";
+                } else if (label === "Doctors List") {
+                  window.location = "/doctorList";
+                } else if (label === "Add Patient") {
+                  window.location = "/addPatient";
+                } else if (label === "Add Doctor") {
+                  window.location = "/MakeDoc";
                 }
                 setActive(label);
               }}
@@ -85,13 +67,8 @@ const SidebarButtons = () => {
     </Grommet>
   );
 };
-export class Home extends Component {
-  renderName = ({ name, email }) => (
-    <div key={email}>
-      {name} {name}
-    </div>
-  );
 
+class AdminDashboard extends Component {
   render() {
     const Header = () => (
       <Box
@@ -105,7 +82,7 @@ export class Home extends Component {
         flex={false}
         style={{ borderBottom: "1px solid grey" }}
       >
-        <a style={{ color: "inherit", textDecoration: "inherit" }} href="/">
+        <a style={{ color: "inherit", textDecoration: "inherit" }}>
           <Heading level="3" margin="none">
             HMS
           </Heading>
@@ -138,7 +115,7 @@ export class Home extends Component {
             </Box>
             <Box gridArea="main" justify="top" align="center">
               <Box align="center" pad="large">
-                <Heading color="#000000">Welcome Patient</Heading>
+                <Heading color="#000000">Admin Dashboard</Heading>
               </Box>
             </Box>
           </Grid>
@@ -148,4 +125,4 @@ export class Home extends Component {
   }
 }
 
-export default Home;
+export default AdminDashboard;

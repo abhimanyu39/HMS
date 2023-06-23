@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Box, Button, Heading, Grommet, FormField, Form, Text } from "grommet";
 
-import "./App.css";
+import "../App.css";
 
 const theme = {
   global: {
@@ -27,14 +27,17 @@ const AppBar = (props) => (
     {...props}
   />
 );
-export class CreateAccount extends Component {
+export class CreatePatient extends Component {
   constuctor() {}
 
   render() {
     return (
       <Grommet theme={theme} full>
         <AppBar>
-          <a style={{ color: "inherit", textDecoration: "inherit" }} href="/">
+          <a
+            style={{ color: "inherit", textDecoration: "inherit" }}
+            href="/adminDashboard"
+          >
             <Heading level="3" margin="none">
               HMS
             </Heading>
@@ -81,7 +84,8 @@ export class CreateAccount extends Component {
                           "&surgeries=" +
                           value.surgeries
                       );
-                      window.location = "/Home";
+                      window.alert("Patient added!");
+                      window.location = "/adminDashboard";
                     }
                   });
               }}
@@ -149,14 +153,9 @@ export class CreateAccount extends Component {
                   style={{ textAlign: "center" }}
                   label="Cancel"
                   fill="horizontal"
-                  href="/"
+                  href="/adminDashboard"
                 />
-                <Button
-                  label="Sign Up"
-                  fill="horizontal"
-                  type="submit"
-                  primary
-                />
+                <Button label="Add" fill="horizontal" type="submit" primary />
               </Box>
             </Form>
           </Box>
@@ -166,4 +165,4 @@ export class CreateAccount extends Component {
   }
 }
 
-export default CreateAccount;
+export default CreatePatient;

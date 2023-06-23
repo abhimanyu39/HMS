@@ -1,17 +1,5 @@
+import { Box, Button, Form, FormField, Grommet, Heading } from "grommet";
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import {
-  Box,
-  Button,
-  Heading,
-  Grommet,
-  FormField,
-  Form,
-  CheckBox,
-} from "grommet";
-
-import "./App.css";
 
 const theme = {
   global: {
@@ -25,7 +13,6 @@ const theme = {
     },
   },
 };
-
 const AppBar = (props) => (
   <Box
     tag="header"
@@ -38,22 +25,8 @@ const AppBar = (props) => (
     {...props}
   />
 );
-
-class LogIn extends Component {
-  state = { isDoctor: false };
-
-  constuctor() {
-    this.routeChange = this.routeChange.bind(this);
-  }
-
-  routeChange() {
-    let path = "/Home";
-    this.props.history.push(path);
-  }
-
+class AdminLogin extends Component {
   render() {
-    const { isDoctor } = this.state; // If doctor, will query from doctor table
-
     return (
       <Grommet theme={theme} full>
         <AppBar>
@@ -64,14 +37,14 @@ class LogIn extends Component {
           </a>
           <div>
             <Button
-              label="Login as Admin"
+              label="Login as Patient"
               style={{
                 textAlign: "center",
                 margin: "0.5rem",
                 border: "1px solid #fff",
               }}
               fill="horizontal"
-              href="/adminLogin"
+              href="/"
             />
           </div>
         </AppBar>
@@ -81,9 +54,8 @@ class LogIn extends Component {
             <Form
               onReset={(event) => console.log(event)}
               onSubmit={({ value }) => {
-                console.log("Submit", value);
                 fetch(
-                  "http://localhost:3001/checklogin?email=" +
+                  "http://localhost:3001/checkAdmin?email=" +
                     value.email +
                     "&password=" +
                     value.password
@@ -93,25 +65,25 @@ class LogIn extends Component {
                     if (res.data.length === 0) {
                       window.alert("Invalid Log In");
                     } else {
-                      window.location = "/Home";
+                      window.location = "/adminDashboard";
                     }
                   });
               }}
             >
               <FormField
                 color="#00739D"
-                label="Email"
+                label="Admin Email"
                 name="email"
                 type="email"
-                placeholder="Please enter your email."
+                placeholder="Please enter admin email."
                 required
               />
               <FormField
                 color="#00739D"
                 type="password"
-                label="Password"
+                label="Admin Password"
                 name="password"
-                placeholder="Please enter your password."
+                placeholder="Please enter admin password."
                 required
               />
               <Box direction="column" align="center">
@@ -122,12 +94,6 @@ class LogIn extends Component {
                   fill="horizontal"
                   primary
                 />
-                <Button
-                  label="Create Account"
-                  style={{ textAlign: "center", margin: "0.5rem" }}
-                  fill="horizontal"
-                  href="/createAcc"
-                />
               </Box>
             </Form>
           </Box>
@@ -136,4 +102,5 @@ class LogIn extends Component {
     );
   }
 }
-export default withRouter(LogIn);
+
+export default AdminLogin;

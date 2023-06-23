@@ -1,6 +1,27 @@
 CREATE DATABASE HMS;
 USE HMS;
 
+
+CREATE TABLE `hms`.`appointments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(50) NOT NULL, 
+  `date` DATE NOT NULL, 
+  `starttime` TIME NOT NULL,
+  `endtime` TIME NOT NULL,
+  `concerns` varchar(40) NOT NULL,
+  `symptoms` varchar(40) NOT NULL,
+  `doctor` varchar(50) NOT NULL,
+  `diagnosis` varchar(40) NOT NULL,
+  `prescription` varchar(50) NOT NULL,
+  PRIMARY KEY (id)) 
+  ENGINE = InnoDB;
+
+CREATE TABLE Admin(
+email varchar(50) PRIMARY KEY,
+password varchar(30) NOT NULL,
+name varchar(50) NOT NULL
+);
+
 CREATE TABLE Patient(
 email varchar(50) PRIMARY KEY,
 password varchar(30) NOT NULL,

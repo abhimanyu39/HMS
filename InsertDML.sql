@@ -1,3 +1,8 @@
+INSERT INTO Admin(email,password,name)
+VALUES
+('admin@hospital.com','admin@123','Hospital Admin')
+;
+
 INSERT INTO Patient(email,password,name,address,gender)
 VALUES
 ('ramesh@gmail.com','hrishikesh13','Ramesh','Tamil Nadu', 'male'),
@@ -16,13 +21,6 @@ INSERT INTO Doctor(email, gender, password, name)
 VALUES
 ('hathalye7@gmail.com', 'male', 'hrishikesh13', 'Hrishikesh Athalye'),
 ('hathalye8@gmail.com', 'male', 'hrishikesh13', 'Hrishikesh Athalye')
-;
-
-INSERT INTO Appointment(id,date,starttime,endtime,status)
-VALUES
-(1, '19-01-15', '09:00', '10:00', 'Done'),
-(2, '19-01-16', '10:00', '11:00', 'Done'),
-(3, '19-01-18', '14:00', '15:00', 'Done')
 ;
 
 INSERT INTO PatientsAttendAppointments(patient,appt,concerns,symptoms)

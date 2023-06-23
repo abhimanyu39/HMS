@@ -1,7 +1,5 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  Schedule,
-} from 'grommet-icons';
+import React, { Component, useState, useEffect } from "react";
+import { Schedule } from "grommet-icons";
 import {
   Box,
   Button,
@@ -14,18 +12,18 @@ import {
   DropButton,
   MaskedInput,
   Keyboard,
-  Select
-} from 'grommet';
-import './App.css';
+  Select,
+} from "grommet";
+import "../App.css";
 const theme = {
   global: {
     colors: {
-      brand: '#000000',
+      brand: "#000000",
       focus: "#000000",
       active: "#000000",
     },
     font: {
-      family: 'Lato',
+      family: "Lato",
     },
   },
 };
@@ -37,14 +35,15 @@ var theSymptoms;
 var theDoc;
 const AppBar = (props) => (
   <Box
-    tag='header'
-    direction='row'
-    align='center'
-    justify='between'
-    background='brand'
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-    style={{ zIndex: '1' }}
-    {...props} />
+    tag="header"
+    direction="row"
+    align="center"
+    justify="between"
+    background="brand"
+    pad={{ left: "medium", right: "small", vertical: "small" }}
+    style={{ zIndex: "1" }}
+    {...props}
+  />
 );
 
 const DropContent = ({ date: initialDate, time: initialTime, onClose }) => {
@@ -80,7 +79,7 @@ const DropContent = ({ date: initialDate, time: initialTime, onClose }) => {
       <Box flex={false} pad="medium" gap="small">
         <Keyboard
           required
-          onEnter={event => {
+          onEnter={(event) => {
             event.preventDefault(); // so drop doesn't re-open
             close();
           }}
@@ -114,22 +113,21 @@ const DropContent = ({ date: initialDate, time: initialTime, onClose }) => {
                   "21",
                   "22",
                   "23",
-
                 ],
                 regexp: /^1[1-2]$|^[0-9]$/,
-                placeholder: "hh"
+                placeholder: "hh",
               },
               { fixed: ":" },
               {
                 length: 2,
                 options: ["00"],
                 regexp: /^[0-5][0-9]$|^[0-9]$/,
-                placeholder: "mm"
-              }
+                placeholder: "mm",
+              },
             ]}
             value={time || initialTime}
             name="maskedInput"
-            onChange={event => setTime(event.target.value)}
+            onChange={(event) => setTime(event.target.value)}
             required
           />
         </Keyboard>
@@ -181,23 +179,21 @@ const DateTimeDropButton = () => {
 const ConcernsTextArea = () => {
   const [value, setValue] = React.useState("");
 
-  const onChange = event => {
+  const onChange = (event) => {
     setValue(event.target.value);
     theConcerns = event.target.value;
   };
 
   return (
     <Grommet theme={theme}>
-      <Box
-        width="medium"
-        height="xsmall"
-      >
-      <TextArea
-        placeholder="Enter your concerns..."
-        value={value}
-        onChange={onChange}
-        fill
-        required />
+      <Box width="medium" height="xsmall">
+        <TextArea
+          placeholder="Enter concerns..."
+          value={value}
+          onChange={onChange}
+          fill
+          required
+        />
       </Box>
     </Grommet>
   );
@@ -206,22 +202,21 @@ const ConcernsTextArea = () => {
 const SymptomsTextArea = () => {
   const [value, setValue] = React.useState("");
 
-  const onChange = event => {
+  const onChange = (event) => {
     setValue(event.target.value);
     theSymptoms = event.target.value;
   };
 
   return (
     <Grommet theme={theme}>
-      <Box
-        width="medium"
-        height="xsmall"
-      >
+      <Box width="medium" height="xsmall">
         <TextArea
-          placeholder="Enter your symptoms..."
+          placeholder="Enter symptoms..."
           value={value}
-          onChange={onChange} fill
-          required />
+          onChange={onChange}
+          fill
+          required
+        />
       </Box>
     </Grommet>
   );
@@ -230,19 +225,19 @@ const SymptomsTextArea = () => {
 function DoctorsDropdown() {
   const [value, setValue] = useState();
   const [doctorsList, setList] = useState([]);
-  useEffect(() => {    
+  useEffect(() => {
     fetch("http://localhost:3001/docInfo")
-    .then(res => res.json())
-    .then(res => {
-      let arr = []
-      res.data.forEach(i => {
-        let tmp = `${i.name} (${i.email})`;
-        arr.push(tmp);
+      .then((res) => res.json())
+      .then((res) => {
+        let arr = [];
+        res.data.forEach((i) => {
+          let tmp = `${i.name} (${i.email})`;
+          arr.push(tmp);
+        });
+        setList(arr);
       });
-      setList(arr);
-    });
   }, []);
-  const onChange = event => {
+  const onChange = (event) => {
     setValue(event.value);
     let doc = event.value.match(/\((.*)\)/)[1];
     theDoc = doc;
@@ -252,73 +247,75 @@ function DoctorsDropdown() {
       options={doctorsList}
       value={value}
       placeholder="Select Doctor"
-      onChange={onChange} fill
+      onChange={onChange}
+      fill
       required
     />
   );
 }
 
-export class SchedulingAppt extends Component {
-  constuctor() {
+export class ScheduleAppointment extends Component {
+  constuctor() {}
+  state = { patientEmail: "", caller: "", navigateTo: "/" };
+  componentDidMount() {
+    const { email, caller } = this.props.match.params;
+    this.setState({ patientEmail: email, caller });
+    if (caller === "admin") this.setState({ navigateTo: "/adminDashboard" });
   }
   render() {
     return (
       <Grommet theme={theme} full>
         <AppBar>
-        <a style={{ color: 'inherit', textDecoration: 'inherit'}} href="/"><Heading level='3' margin='none'>HMS</Heading></a>
+          <a
+            style={{ color: "inherit", textDecoration: "inherit" }}
+            href={this.state.navigateTo}
+          >
+            <Heading level="3" margin="none">
+              HMS
+            </Heading>
+          </a>
         </AppBar>
         <Box align="center" pad="small" gap="small">
           <Form
             onSubmit={({ value }) => {
-              //probably fetch uid here, add one
-              fetch("http://localhost:3001/userInSession")
-                .then(res => res.json())
-                .then(res => {
-                  var string_json = JSON.stringify(res);
-                  var email_json = JSON.parse(string_json);
-                  let email_in_use = email_json.email;
-                  fetch("http://localhost:3001/checkIfApptExists?email=" + email_in_use + "&startTime=" + theTime + "&date=" + theDate + "&docEmail=" + theDoc)
-                    .then(res => res.json())
-                    .then(res => {
-                      if ((res.data[0])) {
-                        window.alert("Appointment Clash! Try another doctor or date/time");
-                      } else {
-                        fetch("http://localhost:3001/genApptUID")
-                          .then(res => res.json())
-                          .then(res => {
-                            var string_json = JSON.stringify(res);
-                            var uid_json = JSON.parse(string_json);
-                            let gen_uid = uid_json.id;
-                            console.log(gen_uid);
-                            fetch("http://localhost:3001/schedule?time=" + theTime + "&endTime=" + endTime +
-                              "&date=" + theDate + "&concerns=" + theConcerns + "&symptoms=" + theSymptoms + 
-                              "&id=" + gen_uid + "&doc=" + theDoc).then((x)=>{
-                              fetch("http://localhost:3001/addToPatientSeeAppt?email=" + email_in_use + "&id=" + gen_uid +
-                                "&concerns=" + theConcerns + "&symptoms=" + theSymptoms).then((x)=>{
-                                  window.alert("Appointment successfully scheduled!");
-                                });
-                            })
-                          });
-                      }
-                    });
+              fetch(
+                "http://localhost:3001/schedule?time=" +
+                  theTime +
+                  "&endTime=" +
+                  endTime +
+                  "&date=" +
+                  theDate +
+                  "&concerns=" +
+                  theConcerns +
+                  "&symptoms=" +
+                  theSymptoms +
+                  "&doc=" +
+                  theDoc +
+                  "&patientEmail=" +
+                  this.state.patientEmail
+              )
+                .then((res) => res.json())
+                .then((res) => {
+                  window.alert("Appointment added!");
+                  if (this.state.caller === "admin") {
+                    window.location =
+                      "/patientStatus/" + this.state.patientEmail;
+                  } else {
+                    window.location = "/home";
+                  }
                 });
             }}
           >
             <Box align="center" gap="small">
               <DoctorsDropdown />
             </Box>
-            <DateTimeDropButton>
-            </DateTimeDropButton>
+            <DateTimeDropButton></DateTimeDropButton>
             <ConcernsTextArea />
             <br />
             <SymptomsTextArea />
             <br />
             <Box align="center" pad="small" gap="small">
-              <Button
-                label="Attempt To Schedule"
-                type="submit"
-                primary
-              />
+              <Button label="Attempt To Schedule" type="submit" primary />
             </Box>
           </Form>
         </Box>
@@ -326,4 +323,4 @@ export class SchedulingAppt extends Component {
     );
   }
 }
-export default SchedulingAppt;
+export default ScheduleAppointment;
